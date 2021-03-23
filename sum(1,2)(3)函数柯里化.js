@@ -27,9 +27,9 @@ function sum(...rest) {
   };
   return _adder;
 }
-console.log(sum(1)(2)(3)); // 6
-console.log(sum(1, 2, 3)(4)); // 10
-console.log(sum(1)(2)(3)(4)(5)); // 15
+// console.log(sum(1)(2)(3)); // 6
+// console.log(sum(1, 2, 3)(4)); // 10
+// console.log(sum(1)(2)(3)(4)(5)); // 15
 
 // 编写一个方法sum，使sum(1,2,3) 和 sum(1,2)(3)的输出都为6
 function sumWithES6(...rest) {
@@ -49,4 +49,24 @@ function sumWithES6(...rest) {
   return _adder;
 }
 
-console.log(sumWithES6(1)(2)(3)); // 6
+// console.log(sumWithES6(1)(2)(3)); // 6
+
+// const curry = (fn, ...args) =>
+//   // 函数的参数个数可以直接通过函数数的.length属性来访问
+//   args.length >= fn.length // 这个判断很关键！！！
+//     ? // 传入的参数大于等于原始函数fn的参数个数，则直接执行该函数
+//       fn(...args)
+//     : /**
+//        * 传入的参数小于原始函数fn的参数个数时
+//        * 则继续对当前函数进行柯里化，返回一个接受所有参数（当前参数和剩余参数） 的函数
+//        */
+//       (..._args) => curry(fn, ...args, ..._args);
+
+// function add1(x, y, z) {
+//   return x + y + z;
+// }
+// const add = curry(add1);
+// console.log(add(1, 2, 3));
+// console.log(add(1)(2)(3));
+// console.log(add(1, 2)(3));
+// console.log(add(1)(2, 3));
