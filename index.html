@@ -5,42 +5,44 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <style></style>
+    <style>
+      .parent {
+        border: solid 5px;
+        width: 300px;
+        overflow: hidden;
+      }
+      .child:nth-child(1) {
+        height: 100px;
+        width: 100px;
+        background-color: yellow;
+        float: left;
+      }
+      .child:nth-child(2) {
+        height: 100px;
+        width: 100px;
+        background-color: red;
+        float: left;
+      }
+      .child:nth-child(3) {
+        height: 100px;
+        width: 100px;
+        background-color: greenyellow;
+        float: left;
+      }
+    </style>
   </head>
-
-  <!-- <style>
-    .fl {
-      display: flex;
-      width: 300px;
-      height: 100px;
-    }
-
-    #green {
-      background: lightgreen;
-      height: 100px;
-      width: 100px;
-      flex-basis: 200px;
-      flex-shrink: 0;
-    }
-
-    #blue {
-      background: lightblue;
-      height: 100px;
-      width: 100px;
-    }
-
-    #red {
-      background: pink;
-      height: 100px;
-      width: 100px;
-    }
-  </style> -->
   <body>
     <!-- <div class="fl">
       <div id="green"></div>
       <div id="blue"></div>
       <div id="red"></div>
     </div> -->
-    <script src="./test.js"></script>
+
+    <div class="parent">
+      <div class="child"></div>
+      <div class="child"></div>
+      <div class="child"></div>
+    </div>
+    <script src="./trim.js"></script>
   </body>
 </html>
