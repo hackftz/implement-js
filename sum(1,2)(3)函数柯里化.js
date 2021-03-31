@@ -1,72 +1,84 @@
-/*
- * @Author: hackftz
- * @Date: 2021-03-20 22:47:58
- * @LastEditTime: 2021-03-20 22:48:12
- * @LastEditors: hackftz
- * @FilePath: /let-code/sum(1,2)(3)函数柯里化.js
- */
+// 1. 确定参数的函数柯里化实现
 
-// 不限数量参数
-function sum(...rest) {
-  // 第一次执行时，定义一个数组专门用来存储所有的参数
-  var _args = Array.prototype.slice.call(arguments);
-
-  // 在内部声明一个函数，利用闭包的特性保存_args并收集所有的参数值
-  var _adder = function () {
-    _args.push(...arguments);
-
-    return _adder;
-  };
-
-  // 利用toString隐式转换的特性，当最后执行时隐式转换，并计算最终的值返回
-  _adder.toString = function () {
-    let sum = _args.reduce(function (a, b) {
-      return a + b;
-    });
-    return sum;
-  };
-  return _adder;
+function sum(a, b, c, d) {
+  return a + b + c + d;
 }
-// console.log(sum(1)(2)(3)); // 6
-// console.log(sum(1, 2, 3)(4)); // 10
-// console.log(sum(1)(2)(3)(4)(5)); // 15
+function curry(fn) {
+  // 递归
+  function sum(...args) {
+    if (args.length < fn.length) {
+      // 判断接受的参数是否小于函数的参数长度
+      return function () {
+        // 参数不够长度，再次接受传递参数
+        return sum(...args, ...arguments);
+      };
+    }
+    return fn(...args); // 不要求改变this,
+  }
 
-// 编写一个方法sum，使sum(1,2,3) 和 sum(1,2)(3)的输出都为6
-function sumWithES6(...rest) {
-  var _args = rest;
-
-  var _adder = function (...innerRest) {
-    _args.push(...innerRest); // 这里使用的是ES6数组的解构
-    return _adder;
-  };
-
-  _adder.toString = function () {
-    let sum = _args.reduce(function (a, b) {
-      return a + b;
-    });
-    return sum;
-  };
-  return _adder;
+  return sum;
 }
 
-// console.log(sumWithES6(1)(2)(3)); // 6
+// let curried = curry(sum);
 
-// const curry = (fn, ...args) =>
-//   // 函数的参数个数可以直接通过函数数的.length属性来访问
-//   args.length >= fn.length // 这个判断很关键！！！
-//     ? // 传入的参数大于等于原始函数fn的参数个数，则直接执行该函数
-//       fn(...args)
-//     : /**
-//        * 传入的参数小于原始函数fn的参数个数时
-//        * 则继续对当前函数进行柯里化，返回一个接受所有参数（当前参数和剩余参数） 的函数
-//        */
-//       (..._args) => curry(fn, ...args, ..._args);
+// console.log(curried(1)(2)); //10
 
-// function add1(x, y, z) {
-//   return x + y + z;
-// }
-// const add = curry(add1);
-// console.log(add(1, 2, 3));
-// console.log(add(1)(2)(3));
-// console.log(add(1, 2)(3));
-// console.log(add(1)(2, 3));
+// console.log('%c⧭', 'color: #997326', curried);
+
+// 2. 不确定参数实现sum(1)(2)(3)(4)(5)(6)...无限累加 #################
+
+function curry(fn) {
+  let params = [];
+
+  function fun(...args) {
+    if (args.length) {
+      params = [...params, ...args];
+      return fun;
+    }
+
+    return fn(params);
+  }
+
+  return fun;
+}
+
+function add(...args) {
+  return Array.from(args).reduce((a, b) => a + b);
+}
+
+// var add = curry(add);
+
+// var res = add(1)(2)();
+// console.log('%c%s', 'color: #bfffc8', res);
+
+// 未知参数个数，方法二 #################################
+
+function curry(a) {
+  function sum(b) {
+    a = b ? a + b : a;
+    return sum;
+  }
+  sum.toString = function () {
+    return a;
+  };
+  return sum;
+}
+// console.log(curry(1)(1).toString());
+
+// 方法二改进版，每次可传递多个参数
+function curry(...args) {
+  let params = args;
+
+  function sum() {
+    params = [...params, ...arguments];
+    return sum;
+  }
+
+  sum.toString = function () {
+    return params.reduce((a, b) => a + b);
+  };
+
+  return sum;
+}
+
+console.log(curry(1)(2)(3)(10)(10, 20).toString());
